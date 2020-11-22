@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct FilterView: View {
     @Binding var isSelected: Bool
@@ -15,7 +16,7 @@ struct FilterView: View {
     var body: some View {
         HStack {
             HStack {
-                Image("\(filter.icon)")
+                Image("\(filter.name)")
                     .resizable()
                     .scaledToFit()
                     .font(.title)
@@ -33,13 +34,27 @@ struct FilterView: View {
         }
         .background(Color(isSelected ? "buttonWhite" : "transparent"))
         .cornerRadius(15)
-        .shadow(color: isSelected ?Color("black").opacity(0.1) : Color("transparent"), radius: 3, x: 2, y: 2)
+        .shadow(color: isSelected ? Color(.black).opacity(0.1) : Color(.clear), radius: 3, x: 2, y: 2)
     }
 }
 
 
 struct FilterView_Previews: PreviewProvider {
     static var previews: some View {
-        FilterView(isSelected: .constant(true), filter: Filter(id: UUID(), icon: "Ernährung", name: "Ernährung", isSelected: true))
+        FilterView(isSelected: .constant(true), filter: Filter(id: UUID(), name: "Ernährung", isSelected: true))
+    }
+}
+
+class FilterData2: ObservableObject {
+    @Published var filter = [Filter]()
+    private var cancellables = Set<AnyCancellable>()
+    
+    func addItem(_ item: Filter) {
+        filter.append(item)
+        // this subscribes us to listen for objectWillChange messages from each
+        // of the items in the array, and we emit our own objectWillChange message
+        item.objectWillChange
+            .sink(receiveValue: { self.objectWillChange.send() })
+            .store(in: &cancellables)
     }
 }
