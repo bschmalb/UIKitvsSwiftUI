@@ -69,6 +69,9 @@ struct ContentView: View {
                 
                 ScrollView(.horizontal, showsIndicators: false){
                     LazyHStack {
+                        Text("Filter:")
+                            .font(.system(size: 18, weight: Font.Weight.medium))
+                            .padding(.trailing, 10)
                         ForEach(filter.filter.indices, id: \.self) { index in
                             FilterView(
                                 isSelected: $filter.filter[index].isSelected,
