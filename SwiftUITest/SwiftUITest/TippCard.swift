@@ -48,14 +48,14 @@ struct TippCard: View {
                                         .font(.caption)
                                         .multilineTextAlignment(.center)
                                     Text(poster.name ?? "User")
-                                            .multilineTextAlignment(.center)
-                                            .padding(5)
-                                        Text("\(poster.gender ?? "")  \(poster.age ?? "")")
-                                            .font(.footnote)
-                                            .multilineTextAlignment(.center)
+                                        .multilineTextAlignment(.center)
+                                        .padding(5)
+                                    Text("\(poster.gender ?? "")  \(poster.age ?? "")")
+                                        .font(.footnote)
+                                        .multilineTextAlignment(.center)
                                     Spacer()
                                 }.foregroundColor(.black)
-                                    Group {
+                                Group {
                                         TippCardRateButton(icon: "hand.thumbsup", title: "Positiv bewerten", color: .black)
                                         Spacer()
                                             .frame(maxHeight: 5)
@@ -160,7 +160,8 @@ struct TippCard: View {
                                 .opacity(0.1)
                                 .onTapGesture(){
                                     impact(style: .heavy)
-                                    self.options.toggle()
+                                    getPoster()
+                                    options.toggle()
                                 }
                         }.foregroundColor(.black)
                         Spacer()
