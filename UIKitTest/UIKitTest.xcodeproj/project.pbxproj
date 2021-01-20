@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		B7376A2025A734E70032DA24 /* FilterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7376A1F25A734E70032DA24 /* FilterButton.swift */; };
+		B7376A2825A87E970032DA24 /* TippCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7376A2725A87E970032DA24 /* TippCard.swift */; };
+		B7376A2D25A8F54F0032DA24 /* TippScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7376A2C25A8F54F0032DA24 /* TippScrollView.swift */; };
+		B7376A3225A8F5960032DA24 /* TippData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7376A3125A8F5960032DA24 /* TippData.swift */; };
+		B7376A4525B34BDD0032DA24 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7376A4425B34BDD0032DA24 /* UserData.swift */; };
 		B78C2185259CBE3700044AAB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B78C2184259CBE3700044AAB /* AppDelegate.swift */; };
 		B78C2187259CBE3700044AAB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B78C2186259CBE3700044AAB /* SceneDelegate.swift */; };
 		B78C2189259CBE3700044AAB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B78C2188259CBE3700044AAB /* ViewController.swift */; };
@@ -38,6 +42,10 @@
 
 /* Begin PBXFileReference section */
 		B7376A1F25A734E70032DA24 /* FilterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterButton.swift; sourceTree = "<group>"; };
+		B7376A2725A87E970032DA24 /* TippCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TippCard.swift; sourceTree = "<group>"; };
+		B7376A2C25A8F54F0032DA24 /* TippScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TippScrollView.swift; sourceTree = "<group>"; };
+		B7376A3125A8F5960032DA24 /* TippData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TippData.swift; sourceTree = "<group>"; };
+		B7376A4425B34BDD0032DA24 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
 		B78C2181259CBE3700044AAB /* UIKitTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UIKitTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B78C2184259CBE3700044AAB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B78C2186259CBE3700044AAB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -109,6 +117,10 @@
 				B78C21E625A4B8D100044AAB /* MenuIcon.swift */,
 				B7376A1F25A734E70032DA24 /* FilterButton.swift */,
 				B78C21E125A4AD3700044AAB /* LabelButton.swift */,
+				B7376A2725A87E970032DA24 /* TippCard.swift */,
+				B7376A3125A8F5960032DA24 /* TippData.swift */,
+				B7376A4425B34BDD0032DA24 /* UserData.swift */,
+				B7376A2C25A8F54F0032DA24 /* TippScrollView.swift */,
 				B78C218D259CBE3800044AAB /* Assets.xcassets */,
 				B78C218F259CBE3800044AAB /* LaunchScreen.storyboard */,
 				B78C2192259CBE3800044AAB /* Info.plist */,
@@ -264,10 +276,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				B78C21E725A4B8D100044AAB /* MenuIcon.swift in Sources */,
+				B7376A3225A8F5960032DA24 /* TippData.swift in Sources */,
+				B7376A2825A87E970032DA24 /* TippCard.swift in Sources */,
 				B7376A2025A734E70032DA24 /* FilterButton.swift in Sources */,
 				B78C21E225A4AD3700044AAB /* LabelButton.swift in Sources */,
 				B78C2189259CBE3700044AAB /* ViewController.swift in Sources */,
 				B78C2185259CBE3700044AAB /* AppDelegate.swift in Sources */,
+				B7376A2D25A8F54F0032DA24 /* TippScrollView.swift in Sources */,
+				B7376A4525B34BDD0032DA24 /* UserData.swift in Sources */,
 				B78C2187259CBE3700044AAB /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

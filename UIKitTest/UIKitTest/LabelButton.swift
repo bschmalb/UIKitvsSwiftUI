@@ -19,15 +19,15 @@ class LabelButton: UIButton {
         setTitle(title, for: .normal)
         titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         setTitleColor(.black, for: .normal)
-        titleEdgeInsets = UIEdgeInsets(top: 0, left: 35, bottom: 0, right: 0);
-        imageEdgeInsets = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -10);
+        titleEdgeInsets = UIEdgeInsets(top: 0, left: 33, bottom: 0, right: 0);
+        imageEdgeInsets = UIEdgeInsets(top: 0, left: 22, bottom: 0, right: -10);
         contentHorizontalAlignment = .left
         backgroundColor = .white
         layer.cornerRadius = 15
         layer.shadowColor = UIColor.black.cgColor
         layer.shadowOffset = CGSize(width: 0, height: 0)
         layer.shadowRadius = 10
-        layer.shadowOpacity = 0.2
+        layer.shadowOpacity = 0.05
         heightAnchor.constraint(equalToConstant: 45).isActive = true
     }
     

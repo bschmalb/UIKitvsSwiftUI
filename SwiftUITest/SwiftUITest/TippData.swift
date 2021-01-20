@@ -28,10 +28,43 @@ struct Tipp: Codable, Hashable, Identifiable{
 }
 
 class Api {
-    func fetchTipps(completion: @escaping ([Tipp]) -> ()) {
-        guard let url = URL(string: "https://sustainablelife.herokuapp.com/tipps?minscore=20") else { return }
+    var tippUrl: String = "https://sustainablelife.herokuapp.com/tipps?"
+    
+    func fetchFiltered(filter: [String], completion: @escaping ([Tipp]) -> ()) {
+        for i in filter {
+            if (i == "Ernährung" || i == "Haushalt" || i == "Transport" || i == "Ressourcen") {
+                tippUrl.append("category=")
+            } else if (i == "Leicht" || i == "Mittel" || i == "Schwer") {
+                tippUrl.append("level=")
+            } else if (i == "Community" || i == "Offiziell") {
+                tippUrl.append("official=")
+            }
+            tippUrl.append(i)
+            if (i != filter[filter.count-1]){
+                tippUrl.append("&")
+            } else{
+                tippUrl.append("&minscore=20")
+            }
+        }
+        if !tippUrl.contains("category") {
+            tippUrl.append("&")
+            tippUrl.append("category=none")
+        }
+        if !tippUrl.contains("level") {
+            tippUrl.append("&")
+            tippUrl.append("level=none")
+        }
+        if !tippUrl.contains("official") {
+            tippUrl.append("&")
+            tippUrl.append("official=none")
+        }
+        guard let url = URL(string: tippUrl.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)!) else {
+            print("can not convert String to URL")
+            return
+        }
         
-        URLSession.shared.dataTask(with: url) { (data, _, _) in
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            
             guard let data = data else { return }
             
             if let tipps = try? JSONDecoder().decode([Tipp].self, from: data) {
@@ -42,11 +75,5 @@ class Api {
             }
         }
         .resume()
-    }
-}
-
-struct TippData_Previews: PreviewProvider {
-    static var previews: some View {
-        Text("Hello, World!")
     }
 }

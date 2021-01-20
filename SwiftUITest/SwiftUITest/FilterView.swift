@@ -11,50 +11,26 @@ import Combine
 struct FilterView: View {
     @Binding var isSelected: Bool
     var filter: Filter
-    var screen = UIScreen.main.bounds.width
     
     var body: some View {
         HStack {
-            HStack {
-                Image("\(filter.name)")
-                    .resizable()
-                    .scaledToFit()
-                    .font(.title)
-                    .frame(width: screen < 400 ? screen * 0.05 : 25, height: screen < 400 ? screen * 0.05 : 25)
-                    .opacity(isSelected ? 1 : 0.3)
-                    .padding(5)
-                Text(filter.name)
-                    .font(.system(size: screen < 500 ? screen * 0.045 : 20))
-                    .fontWeight(.medium)
-                    .accentColor(Color("black"))
-                    .fixedSize(horizontal: true, vertical: false)
-                    .opacity(isSelected ? 1 : 0.3)
-            }.padding(.horizontal, 10)
-                .padding(.vertical, 6)
+            Image("\(filter.name)")
+                .resizable()
+                .scaledToFit()
+                .font(.title)
+                .frame(width: 18, height: 18)
+                .padding(5)
+            Text(filter.name)
+                .font(.system(size: 16))
+                .fontWeight(.medium)
+                .accentColor(Color("black"))
+                .fixedSize(horizontal: true, vertical: false)
         }
-        .background(Color(isSelected ? "buttonWhite" : "transparent"))
+        .opacity(isSelected ? 1 : 0.3)
+        .padding(.horizontal, 10)
+        .padding(.vertical, 6)
+        .background(isSelected ? Color("buttonWhite") : .clear)
         .cornerRadius(15)
         .shadow(color: isSelected ? Color(.black).opacity(0.1) : Color(.clear), radius: 3, x: 2, y: 2)
-    }
-}
-
-
-struct FilterView_Previews: PreviewProvider {
-    static var previews: some View {
-        FilterView(isSelected: .constant(true), filter: Filter(id: UUID(), name: "Ernährung", isSelected: true))
-    }
-}
-
-class FilterData2: ObservableObject {
-    @Published var filter = [Filter]()
-    private var cancellables = Set<AnyCancellable>()
-    
-    func addItem(_ item: Filter) {
-        filter.append(item)
-        // this subscribes us to listen for objectWillChange messages from each
-        // of the items in the array, and we emit our own objectWillChange message
-        item.objectWillChange
-            .sink(receiveValue: { self.objectWillChange.send() })
-            .store(in: &cancellables)
     }
 }

@@ -11,37 +11,39 @@ func impact (style: UIImpactFeedbackGenerator.FeedbackStyle) {
     UIImpactFeedbackGenerator(style: style).impactOccurred()
 }
 
-class Filter: Identifiable, ObservableObject {
-    var id: UUID
+struct Filter {
     var name: String
-    @Published var isSelected: Bool
-    
-    init(id: UUID, name: String, isSelected: Bool) {
-        self.id = id
-        self.name = name
-        self.isSelected = isSelected
-    }
+    var isSelected: Bool
 }
 
 
 struct ContentView: View {
-    
-    @State var objectLoaded: Bool = false
     
     var screen = UIScreen.main.bounds
     @State var offsetCapsule: CGFloat = 0
     @State var widthCapsule: CGFloat = 25
     @State var tabViewSelected = 0
     
-    @State var tipps: [Tipp] = []
-    @State var user: User = User(_id: "", phoneId: "", name: "Bastian", checkedTipps: [], savedTipps: [], savedFacts: [], log: [])
+    @State var tipps: [Tipp] = [Tipp]()
+    
+    @State var reloadScrollView: Bool = false
     
     @State var filterString = ["Ernährung", "Transport", "Haushalt", "Ressourcen", "Leicht", "Mittel", "Schwer", "Offiziell", "Community"]
     
-    @ObservedObject var filter = FilterData2()
+    @State var filter: [Filter] = [
+        Filter(name: "Ernährung", isSelected: true),
+        Filter(name: "Transport", isSelected: true),
+        Filter(name: "Haushalt", isSelected: true),
+        Filter(name: "Ressourcen", isSelected: true),
+        Filter(name: "Leicht", isSelected: true),
+        Filter(name: "Mittel", isSelected: true),
+        Filter(name: "Schwer", isSelected: true),
+        Filter(name: "Offiziell", isSelected: true),
+        Filter(name: "Community", isSelected: true),
+    ]
     
     var cardColors: [String]  = [
-        "cardgreen2", "cardblue2", "cardyellow2", "cardpurple2", "cardorange2", "cardred2", "cardturqouise2", "cardyelgre2", "cardpink2"
+        "cardgreen", "cardblue", "cardyellow", "cardpurple", "cardorange", "cardred", "cardturqouise", "cardyelgre", "cardpink"
     ]
     
     var body: some View {
@@ -55,10 +57,7 @@ struct ContentView: View {
                         .fontWeight(.bold)
                         .padding(.leading, 20)
                     Spacer()
-                    Button(action: {
-                        //self.showAddTipps.toggle()
-                        impact(style: .medium)
-                    }) {
+                    Button(action: {}) {
                         Image(systemName: "plus.circle")
                             .font(.title)
                             .padding(10)
@@ -72,14 +71,22 @@ struct ContentView: View {
                         Text("Filter:")
                             .font(.system(size: 18, weight: Font.Weight.medium))
                             .padding(.trailing, 10)
-                        ForEach(filter.filter.indices, id: \.self) { index in
+                        ForEach(filter.indices, id: \.self) { index in
                             FilterView(
-                                isSelected: $filter.filter[index].isSelected,
-                                filter: filter.filter[index])
+                                isSelected: $filter[index].isSelected,
+                                filter: filter[index])
                                 .onTapGesture {
                                     impact(style: .medium)
-                                    filter.filter[index].isSelected.toggle()
-                                    filterTipps2(index: index)
+                                    filter[index].isSelected ?
+                                        filterString.removeAll(where: { $0 == filter[index].name }) : filterString.append(filter[index].name)
+                                    Api().fetchFiltered(filter: filterString) { tipps in
+                                        self.tipps = tipps
+                                        reloadScrollView = true
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                            reloadScrollView = false
+                                        }
+                                    }
+                                    filter[index].isSelected.toggle()
                                 }
                         }
                     }
@@ -87,46 +94,28 @@ struct ContentView: View {
                 }.frame(height: 55)
                 .animation(.spring())
                 
-                ScrollView (.horizontal, showsIndicators: false){
-                    LazyHStack {
-                        ForEach(self.tipps.indices, id: \.self) { index in
-                            if ([self.tipps[index].category, self.tipps[index].level, self.tipps[index].official].allSatisfy(self.filterString.contains)){
-                                HStack {
-                                    Spacer()
-                                    TippCard(user: user, isChecked: $tipps[index].isChecked, isBookmarked: $tipps[index].isBookmarked, tipp: tipps[index], color: cardColors[index % cardColors.count])
-                                    Spacer()
-                                }.frame(width: UIScreen.main.bounds.width)
+                if !reloadScrollView {
+                    ScrollView (.horizontal, showsIndicators: false){
+                        LazyHStack {
+                            ForEach(self.tipps.indices, id: \.self) { index in
+                                if tipps.count > 0 {
+                                    HStack (alignment: .center){
+                                        TippCard(tipp: tipps[index], color: cardColors[index % cardColors.count])
+                                    }.frame(width: UIScreen.main.bounds.width)
+                                }
                             }
                         }
-                    }
-                }.frame(height: UIScreen.main.bounds.height / 2.1 + 20)
-                .padding(.bottom, 12)
-                
+                    }.frame(height: UIScreen.main.bounds.height / 2.1 + 20)
+                    .padding(.bottom, 12)
+                } else {
+                    Spacer()
+                        .frame(height: UIScreen.main.bounds.height / 2.1 + 32)
+                }
                 
                 VStack (spacing: 10) {
-                    HStack {
-                        Button(action: {
-                        }) {
-                            ButtonLabel(icon: "plus.circle", text: "Eigenen Tipp hinzufügen")
-                            Spacer()
-                        }
-                        .frame(width: UIScreen.main.bounds.width - 30, height: 45)
-                        .background(Color(.white))
-                        .cornerRadius(15)
-                        .shadow(color: Color(.black).opacity(0.05), radius: 5, x: 4, y: 4)
-                    }
-                    HStack {
-                        Button(action: {
-                        }) {
-                            ButtonLabel(icon: "hand.thumbsup", text: "Tipps von Nutzern bewerten")
-                            Spacer()
-                        }
-                        .frame(width: UIScreen.main.bounds.width - 30, height: 45)
-                        .background(Color(.white))
-                        .cornerRadius(15)
-                        .shadow(color: Color(.black).opacity(0.05), radius: 5, x: 4, y: 4)
-                    }
-                }.offset(y: -UIScreen.main.bounds.height / 81)
+                    ButtonLabel(icon: "plus.circle", text: "Eigenen Tipp hinzufügen")
+                    ButtonLabel(icon: "hand.thumbsup", text: "Tipps von Nutzern bewerten")
+                }.offset(y: -10)
                 
                 Spacer()
                 
@@ -136,15 +125,15 @@ struct ContentView: View {
                         HStack {
                             Spacer()
                                 .frame(width: 20)
-                            TabButton(tabViewSelected: $tabViewSelected, offsetCapsule: $offsetCapsule, icon: "lightbulb", setTab: 0)
+                            TabButton(tabViewSelected: $tabViewSelected, offsetCapsule: $offsetCapsule, icon: "lightbulb", tabItem: 0)
                             Spacer()
-                            TabButton(tabViewSelected: $tabViewSelected, offsetCapsule: $offsetCapsule, icon: "doc.plaintext", setTab: 1)
+                            TabButton(tabViewSelected: $tabViewSelected, offsetCapsule: $offsetCapsule, icon: "doc.plaintext", tabItem: 1)
                             Spacer()
-                            TabButton(tabViewSelected: $tabViewSelected, offsetCapsule: $offsetCapsule, icon: "book", setTab: 2)
+                            TabButton(tabViewSelected: $tabViewSelected, offsetCapsule: $offsetCapsule, icon: "book", tabItem: 2)
                             Spacer()
-                            TabButton(tabViewSelected: $tabViewSelected, offsetCapsule: $offsetCapsule, icon: "person", setTab: 3)
+                            TabButton(tabViewSelected: $tabViewSelected, offsetCapsule: $offsetCapsule, icon: "person", tabItem: 3)
                             Spacer()
-                                .frame(width: screen.width / 13)
+                                .frame(width: 20)
                         }
                         .accentColor(Color(.black))
                         .offset(y: -2)
@@ -153,44 +142,22 @@ struct ContentView: View {
                             .frame(width: widthCapsule, height: 2)
                             .offset(x: offsetCapsule - (screen.width/2), y: 17)
                     }
-                    .frame(width: screen.width - 30, height: 25 + screen.height / 26, alignment: .center)
+                    .frame(width: screen.width - 30, height: 55, alignment: .center)
                     .background(Color(.white))
                     .cornerRadius(20)
                     .shadow(color: Color(.black).opacity(0.2), radius: 5, x: 0, y: 4)
                 }
-                .padding(.bottom, screen.height / 40)
+                .padding(.bottom, 20)
                 .animation(.spring())
 
                 
             }.accentColor(.black)
             .onAppear(){
-                Api().fetchTipps { (tipps) in
+                Api().fetchFiltered(filter: filterString) { (tipps) in
                     self.tipps = tipps
-                }
-                if !objectLoaded {
-                    filter.addItem(Filter(id: UUID(), name: "Ernährung", isSelected: true))
-                    filter.addItem(Filter(id: UUID(), name: "Transport", isSelected: true))
-                    filter.addItem(Filter(id: UUID(), name: "Haushalt", isSelected: true))
-                    filter.addItem(Filter(id: UUID(), name: "Ressourcen", isSelected: true))
-                    filter.addItem(Filter(id: UUID(), name: "Leicht", isSelected: true))
-                    filter.addItem(Filter(id: UUID(), name: "Mittel", isSelected: true))
-                    filter.addItem(Filter(id: UUID(), name: "Schwer", isSelected: true))
-                    filter.addItem(Filter(id: UUID(), name: "Offiziell", isSelected: true))
-                    filter.addItem(Filter(id: UUID(), name: "Community", isSelected: true))
-                    objectLoaded = true
                 }
             }
             .ignoresSafeArea(.all)
-        }
-    }
-    
-    func filterTipps2(index: Int){
-        if (filterString.contains(filter.filter[index].name)){
-            filterString.removeAll(where: {$0 == filter.filter[index].name})
-            self.filter.filter[index].isSelected = false
-        } else {
-            filterString.append(filter.filter[index].name)
-            self.filter.filter[index].isSelected = true
         }
     }
 }
@@ -207,15 +174,22 @@ struct ButtonLabel: View {
     var text: String
     
     var body: some View {
-        HStack {
-            Image(systemName: icon)
-                .font(.system(size: UIScreen.main.bounds.width < 500 ? UIScreen.main.bounds.width * 0.05 : 20, weight: Font.Weight.medium))
-            Text(text)
-                .font(.system(size: UIScreen.main.bounds.width < 500 ? UIScreen.main.bounds.width * 0.045 : 20))
-                .fontWeight(.medium)
+        Button(action: {}) {
+            HStack {
+                Image(systemName: icon)
+                    .font(.system(size: 18, weight: Font.Weight.medium))
+                Text(text)
+                    .font(.system(size: 16))
+                    .fontWeight(.medium)
+            }
+            .padding(13)
+            .padding(.leading, 10)
+            Spacer()
         }
-        .padding(13)
-        .padding(.leading, 10)
+        .frame(width: UIScreen.main.bounds.width - 30, height: 45)
+        .background(Color(.white))
+        .cornerRadius(15)
+        .shadow(color: Color(.black).opacity(0.05), radius: 5, x: 4, y: 4)
     }
 }
 
@@ -223,29 +197,24 @@ struct TabButton: View {
     
     @Binding var tabViewSelected: Int
     @Binding var offsetCapsule: CGFloat
-    
     var icon: String
-    var setTab: Int
+    var tabItem: Int
     
     var body: some View {
         GeometryReader { g in
             Button(action: {
-                self.tabViewSelected = setTab
-                
-                self.offsetCapsule = g.frame(in: .global).midX
-                
+                offsetCapsule = g.frame(in: .global).midX
                 impact(style: .medium)
+                tabViewSelected = tabItem
             }) {
                 Image(systemName: icon)
-                    .font(.system(size: 16 + UIScreen.main.bounds.height / 160, weight: Font.Weight.medium))
-                    .opacity(self.tabViewSelected == setTab ? 1 : 0.5)
+                    .font(.system(size: 20, weight: .medium))
+                    .foregroundColor(tabViewSelected == tabItem ? .black : .gray)
                     .frame(width: 40, height: 40)
             }
             .onAppear(){
-                if setTab == 0 {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
-                        self.offsetCapsule = g.frame(in: .global).midX
-                    }
+                if tabItem == 0 {
+                    self.offsetCapsule = g.frame(in: .global).midX
                 }
             }
         }

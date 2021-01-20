@@ -16,7 +16,6 @@ class MenuIcon: UIButton {
         super.init(frame: .zero)
         setImage(UIImage(systemName: icon, withConfiguration: UIImage.SymbolConfiguration(pointSize: 20, weight: .medium, scale: .default)), for: .normal)
         tintColor = isSelected ? .black : .gray
-//        heightAnchor.constraint(equalToConstant: 45).isActive = true
     }
     
     required init?(coder: NSCoder) {

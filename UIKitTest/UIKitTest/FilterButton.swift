@@ -12,31 +12,28 @@ class FilterButton: UIButton {
         super.init(frame: frame)
     }
     
-    init(title: String, isSelected: Bool) {
+    var filter: Filter = Filter(name: "Test", isSelected: false)
+    
+    init(filter: Filter) {
         super.init(frame: .zero)
-        setImage(UIImage.init(named: title), for: .normal)
+        self.filter = filter
+        setImage(UIImage.init(named: filter.name), for: .normal)
         tintColor = .black
-        setTitle(title, for: .normal)
+        setTitle(filter.name, for: .normal)
         titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         setTitleColor(.black, for: .normal)
         imageView?.contentMode = .scaleAspectFit
-        titleEdgeInsets = UIEdgeInsets(top: 0, left: -85, bottom: 0, right: 0)
-        imageEdgeInsets = UIEdgeInsets(top: 2, left: -30, bottom: 2, right: 0)
-        contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -25)
+        titleEdgeInsets = UIEdgeInsets(top: 0, left: -110, bottom: 0, right: 0)
+        imageEdgeInsets = UIEdgeInsets(top: 5, left: -55, bottom: 5, right: 0)
+        contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -45)
         layer.cornerRadius = 15
         layer.shadowColor = UIColor.black.cgColor
-        layer.shadowOffset = CGSize(width: 0, height: 0)
+        layer.shadowOffset = CGSize(width: 2, height: 2)
         layer.shadowRadius = 5
-        layer.shadowOpacity = isSelected ? 0.1 : 0
-        backgroundColor = isSelected ? .white : .clear
+        layer.shadowOpacity = 0.1
+        backgroundColor = .white
         heightAnchor.constraint(equalToConstant: 40).isActive = true
         translatesAutoresizingMaskIntoConstraints = false
-        addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
-    }
-    
-    @objc fileprivate func buttonTapped(){
-        print(isSelected)
-        isSelected = !isSelected
     }
     
     required init?(coder: NSCoder) {
@@ -44,3 +41,7 @@ class FilterButton: UIButton {
     }
 }
 
+struct Filter {
+    var name: String
+    var isSelected: Bool
+}

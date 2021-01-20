@@ -35,36 +35,3 @@ struct Log: Encodable, Decodable {
     var binWaste: Int
     var date: String
 }
-
-class UserApi {
-    
-    @State var id = UserDefaults.standard.string(forKey: "id")
-    
-    func fetchUser(completion: @escaping (User) -> ()) {
-        
-        guard let url = URL(string: "https://sustainablelife.herokuapp.com/users/" + (id ?? "")) else { return }
-        
-        URLSession.shared.dataTask(with: url) { (data, _, _) in
-            
-            if let data = data {
-                if let user = try? JSONDecoder().decode(User.self, from: data) {
-                    // we have good data – go back to the main thread
-                    DispatchQueue.main.async {
-                        // update our UI
-                        completion(user)
-                    }
-                    
-                    // everything is good, so we can exit
-                    return
-                }
-            }
-        }
-        .resume()
-    }
-}
-
-struct UserData_Previews: PreviewProvider {
-    static var previews: some View {
-        Text("Hello World")
-    }
-}
