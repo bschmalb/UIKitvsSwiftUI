@@ -84,7 +84,6 @@ class TippCell: UICollectionViewCell {
         self.cardColor = cardColor
         
         let card = TippCard(tipp: tipp, cardColor: cardColor)
-        card.translatesAutoresizingMaskIntoConstraints = false
         
         contentView.addSubview(card)
     }

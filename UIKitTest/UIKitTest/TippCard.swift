@@ -78,7 +78,6 @@ class TippCardMain: UIStackView {
         let optionsButton: UIButton = UIButton()
         optionsButton.setImage(UIImage(systemName: "ellipsis", withConfiguration: UIImage.SymbolConfiguration(pointSize: 24, weight: .medium, scale: .default)), for: .normal)
         optionsButton.tintColor = .black
-        optionsButton.translatesAutoresizingMaskIntoConstraints = false
         return optionsButton
     }()
     
@@ -189,12 +188,6 @@ class TippCardMain: UIStackView {
         buttonStack.addArrangedSubview(saveButton)
         
         mainStackView.addArrangedSubview(UIView())
-        addSubview(tippImage)
-        mainStackView.addArrangedSubview(UIView())
-        addSubview(tippTitle)
-        addSubview(quelleLabel)
-        addSubview(buttonStack)
-        mainStackView.addArrangedSubview(UIView())
         mainStackView.addArrangedSubview(tippImage)
         mainStackView.addArrangedSubview(tippTitle)
         if tipp.source.count > 2 {
@@ -261,7 +254,6 @@ class TippCardBack: UIStackView {
     
     lazy var gepostedText: UILabel = {
         let textLabel = UILabel()
-        textLabel.translatesAutoresizingMaskIntoConstraints = false
         textLabel.textAlignment = .center
         textLabel.font = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.regular)
         textLabel.text = "Gepostet von:"
@@ -271,20 +263,16 @@ class TippCardBack: UIStackView {
     
     lazy var posterName: UILabel = {
         let textLabel = UILabel()
-        textLabel.translatesAutoresizingMaskIntoConstraints = false
         textLabel.textAlignment = .center
         textLabel.font = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.regular)
-        textLabel.text = ""
         textLabel.textColor = .black
         return textLabel
     }()
     
     lazy var posterAgeGender: UILabel = {
         let textLabel = UILabel()
-        textLabel.translatesAutoresizingMaskIntoConstraints = false
         textLabel.textAlignment = .center
         textLabel.font = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.regular)
-        textLabel.text = ""
         textLabel.textColor = .black
         return textLabel
     }()

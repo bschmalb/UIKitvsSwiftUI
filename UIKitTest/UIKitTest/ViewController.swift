@@ -15,8 +15,6 @@ class ViewController: UIViewController {
     
     lazy var navText: UILabel = {
         let textLabel = UILabel()
-        textLabel.translatesAutoresizingMaskIntoConstraints = false
-        textLabel.textAlignment = .left
         textLabel.font = UIFont.systemFont(ofSize: 28, weight: UIFont.Weight.bold)
         textLabel.text = "Tipps für Dich"
         textLabel.textColor = .black
@@ -25,7 +23,6 @@ class ViewController: UIViewController {
     
     lazy var navButton: UIButton = {
         let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(UIImage(systemName: "plus.circle", withConfiguration: UIImage.SymbolConfiguration(pointSize: 28, weight: .regular, scale: .default)), for: .normal)
         button.tintColor = .black
         button.imageEdgeInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 10)
@@ -34,8 +31,6 @@ class ViewController: UIViewController {
     
     lazy var filterLabel: UILabel = {
         let textLabel2 = UILabel()
-        textLabel2.translatesAutoresizingMaskIntoConstraints = false
-        textLabel2.textAlignment = .left
         textLabel2.font = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.medium)
         textLabel2.text = "Filter:"
         textLabel2.textColor = .black

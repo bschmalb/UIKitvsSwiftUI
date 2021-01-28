@@ -11,22 +11,13 @@ func impact (style: UIImpactFeedbackGenerator.FeedbackStyle) {
     UIImpactFeedbackGenerator(style: style).impactOccurred()
 }
 
-struct Filter {
-    var name: String
-    var isSelected: Bool
-}
-
-
 struct ContentView: View {
     
-    var screen = UIScreen.main.bounds
     @State var offsetCapsule: CGFloat = 0
     @State var widthCapsule: CGFloat = 25
     @State var tabViewSelected = 0
     
     @State var tipps: [Tipp] = [Tipp]()
-    
-    @State var reloadScrollView: Bool = false
     
     @State var filterString = ["Ernährung", "Transport", "Haushalt", "Ressourcen", "Leicht", "Mittel", "Schwer", "Offiziell", "Community"]
     
@@ -80,10 +71,9 @@ struct ContentView: View {
                                     filter[index].isSelected ?
                                         filterString.removeAll(where: { $0 == filter[index].name }) : filterString.append(filter[index].name)
                                     Api().fetchFiltered(filter: filterString) { tipps in
-                                        self.tipps = tipps
-                                        reloadScrollView = true
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                            reloadScrollView = false
+                                        self.tipps = []
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+                                            self.tipps = tipps
                                         }
                                     }
                                     filter[index].isSelected.toggle()
@@ -92,30 +82,23 @@ struct ContentView: View {
                     }
                     .padding(.horizontal, 20)
                 }.frame(height: 55)
-                .animation(.spring())
                 
-                if !reloadScrollView {
-                    ScrollView (.horizontal, showsIndicators: false){
-                        LazyHStack {
-                            ForEach(self.tipps.indices, id: \.self) { index in
-                                if tipps.count > 0 {
-                                    HStack (alignment: .center){
-                                        TippCard(tipp: tipps[index], color: cardColors[index % cardColors.count])
-                                    }.frame(width: UIScreen.main.bounds.width)
-                                }
+                ScrollView (.horizontal, showsIndicators: false){
+                    LazyHStack {
+                        if tipps.count > 0 {
+                            ForEach(tipps.indices, id: \.self) { index in
+                                HStack (alignment: .center){
+                                    TippCard(tipp: tipps[index], color: cardColors[index % cardColors.count])
+                                }.frame(width: UIScreen.main.bounds.width)
                             }
                         }
-                    }.frame(height: UIScreen.main.bounds.height / 2.1 + 20)
-                    .padding(.bottom, 12)
-                } else {
-                    Spacer()
-                        .frame(height: UIScreen.main.bounds.height / 2.1 + 32)
-                }
+                    }
+                }.frame(height: UIScreen.main.bounds.height / 2.1 + 20)
                 
                 VStack (spacing: 10) {
                     ButtonLabel(icon: "plus.circle", text: "Eigenen Tipp hinzufügen")
                     ButtonLabel(icon: "hand.thumbsup", text: "Tipps von Nutzern bewerten")
-                }.offset(y: -10)
+                }
                 
                 Spacer()
                 
@@ -140,17 +123,14 @@ struct ContentView: View {
                         Capsule()
                             .fill(Color(.black))
                             .frame(width: widthCapsule, height: 2)
-                            .offset(x: offsetCapsule - (screen.width/2), y: 17)
+                            .offset(x: offsetCapsule - (UIScreen.main.bounds.width/2), y: 17)
                     }
-                    .frame(width: screen.width - 30, height: 55, alignment: .center)
+                    .frame(width: UIScreen.main.bounds.width - 30, height: 55, alignment: .center)
                     .background(Color(.white))
                     .cornerRadius(20)
                     .shadow(color: Color(.black).opacity(0.2), radius: 5, x: 0, y: 4)
                 }
                 .padding(.bottom, 20)
-                .animation(.spring())
-
-                
             }.accentColor(.black)
             .onAppear(){
                 Api().fetchFiltered(filter: filterString) { (tipps) in
@@ -159,12 +139,7 @@ struct ContentView: View {
             }
             .ignoresSafeArea(.all)
         }
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
+        .animation(.spring())
     }
 }
 
@@ -214,7 +189,7 @@ struct TabButton: View {
             }
             .onAppear(){
                 if tabItem == 0 {
-                    self.offsetCapsule = g.frame(in: .global).midX
+                    offsetCapsule = g.frame(in: .global).midX
                 }
             }
         }

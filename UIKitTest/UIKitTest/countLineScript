@@ -1,0 +1,16 @@
+find . \( -iname \*.swift \) -exec awk ' { 
+    {
+        gsub(/^ +/,"")
+        thislen=length($0)
+    }
+    {
+        if (thislen > 3 && /^[^\/]/)
+        { 
+            totlen+=thislen
+            totlin+=1
+            }
+    }
+} 
+END { 
+    printf("average: %d\n", totlen/totlin)
+} ' '{}' \+
