@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B743BF9A25C9F81C00B3ABE7 /* ButtonLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B743BF9925C9F81C00B3ABE7 /* ButtonLabel.swift */; };
 		B76678C0256A8EF400242FAF /* SwiftUITestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B76678BF256A8EF400242FAF /* SwiftUITestApp.swift */; };
 		B76678C2256A8EF400242FAF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B76678C1256A8EF400242FAF /* ContentView.swift */; };
 		B76678C4256A8EF500242FAF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B76678C3256A8EF500242FAF /* Assets.xcassets */; };
@@ -37,6 +38,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B743BF9925C9F81C00B3ABE7 /* ButtonLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonLabel.swift; sourceTree = "<group>"; };
 		B76678BC256A8EF400242FAF /* SwiftUITest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftUITest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B76678BF256A8EF400242FAF /* SwiftUITestApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUITestApp.swift; sourceTree = "<group>"; };
 		B76678C1256A8EF400242FAF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 			children = (
 				B76678BF256A8EF400242FAF /* SwiftUITestApp.swift */,
 				B76678C1256A8EF400242FAF /* ContentView.swift */,
+				B743BF9925C9F81C00B3ABE7 /* ButtonLabel.swift */,
 				B766790E256A9BFA00242FAF /* FilterView.swift */,
 				B7667903256A964800242FAF /* TippCard.swift */,
 				B76678F0256A925B00242FAF /* TippData.swift */,
@@ -272,6 +275,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B76678C2256A8EF400242FAF /* ContentView.swift in Sources */,
+				B743BF9A25C9F81C00B3ABE7 /* ButtonLabel.swift in Sources */,
 				B76678F1256A925B00242FAF /* TippData.swift in Sources */,
 				B7667904256A964800242FAF /* TippCard.swift in Sources */,
 				B76678F9256A94B300242FAF /* UserData.swift in Sources */,
